@@ -81,7 +81,7 @@ inline QImage toRandomTriangle(const QImage & arg) {
         toRandomTriangle(
             arg.width(),
             arg.height(),
-            4 /*晶格大小*/);
+            5 /*晶格大小*/);
 
     QImage varAns = arg.convertToFormat(QImage::Format_RGBA64);
 
@@ -115,7 +115,7 @@ inline QImage toRandomTriangle(const QImage & arg) {
         auto varDrawColor = QColor(varColor, varColor, varColor);
 
         varPainter.setBrush(varDrawColor);
-        varPainter.setPen(QPen(varDrawColor.darker(1), 0.25));
+        varPainter.setPen(QPen(QColor(255,255,255,255), 0.15));
 
         assert(varI.size() == 3);
         varPainter.drawPolygon(varI.data(), 3);
@@ -286,7 +286,7 @@ public:
 
         {
             auto varTmpImage = toRandomTriangle(mmmInputImage);
-            mmmOutputImage =
+            mmmOutputImage = /*混合*/
                 mix_image(mmmInputImage, varTmpImage,
                     [](
                         const CurrentColor & argInputColor0,
@@ -299,7 +299,9 @@ public:
                 Color varInput0{ *(argInputColor0.color) };
                 Color varInput1{ *(argInputColor1.color) };
                 auto varF = [](double a, double b)->double {
-                    const auto var = (std::rand() & 255) / 1024 + 0.5;
+                    const auto var = std::clamp( (std::rand() & 255) / 1024.0 + 0.55 , 
+                        0.3,
+                        0.685);
                     return std::clamp(a * (1 - var) + b * var, 0., 1.);
                 };
                 Color varAns{ varF(varInput0.r,varInput1.r),
@@ -357,7 +359,7 @@ inline void RandomTextColorPrivate<RandomTextColorConvert>::create_mask_image() 
     std::uniform_int_distribution<> varRRandom(3,
         std::max(4, std::min(
             mmmInputImage.height() - 1,
-            mmmInputImage.width() - 1) >> 2)
+            mmmInputImage.width() - 1) >> 3)
     );
     std::uniform_int_distribution<ushort>
         varRGBRanom(colormax >> 1, colormax);
@@ -396,8 +398,8 @@ inline void RandomTextColorPrivate<RandomTextColorConvert>::create_mask_image() 
         /*set random color*/
         varPainter.setBrush(QBrush(
             QColor::fromRgba64(
-                varRGB[0] >> 1,
-                varRGB[1] >> 1,
+                varRGB[0] >> 2,
+                varRGB[1] >> 2,
                 varRGB[2] >> 1
             )));
 
