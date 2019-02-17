@@ -79,9 +79,9 @@ inline QImage toRandomTriangle(const QImage & arg) {
 
     auto varTriangles =
         toRandomTriangle(
-            arg.width(), 
+            arg.width(),
             arg.height(),
-            4 /*晶格大小*/ );
+            4 /*晶格大小*/);
 
     QImage varAns = arg.convertToFormat(QImage::Format_RGBA64);
 
@@ -110,12 +110,12 @@ inline QImage toRandomTriangle(const QImage & arg) {
         }
 
         auto varColor = std::min(255,
-            qGray( arg.pixel (x, y) ) + ( std::rand()&15)) ;
+            qGray(arg.pixel(x, y)) + (std::rand() & 15));
 
         auto varDrawColor = QColor(varColor, varColor, varColor);
 
         varPainter.setBrush(varDrawColor);
-        varPainter.setPen(QPen(varDrawColor.darker(1) ,0.25));
+        varPainter.setPen(QPen(varDrawColor.darker(1), 0.25));
 
         assert(varI.size() == 3);
         varPainter.drawPolygon(varI.data(), 3);
@@ -299,7 +299,7 @@ public:
                 Color varInput0{ *(argInputColor0.color) };
                 Color varInput1{ *(argInputColor1.color) };
                 auto varF = [](double a, double b)->double {
-                    const auto var = (std::rand()&255)/1024 + 0.5 ;
+                    const auto var = (std::rand() & 255) / 1024 + 0.5;
                     return std::clamp(a * (1 - var) + b * var, 0., 1.);
                 };
                 Color varAns{ varF(varInput0.r,varInput1.r),
@@ -396,9 +396,9 @@ inline void RandomTextColorPrivate<RandomTextColorConvert>::create_mask_image() 
         /*set random color*/
         varPainter.setBrush(QBrush(
             QColor::fromRgba64(
-                varRGB[0]>>1,
-                varRGB[1],
-                varRGB[2]
+                varRGB[0] >> 1,
+                varRGB[1] >> 1,
+                varRGB[2] >> 1
             )));
 
         /*draw random Ellipse*/
