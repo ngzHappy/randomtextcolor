@@ -390,9 +390,9 @@ inline void RandomTextColorPrivate<RandomTextColorConvert>::create_mask_image() 
         /*set random color*/
         varPainter.setBrush(QBrush(
             QColor::fromRgba64(
-                varRGB[0],
-                varRGB[1],
-                varRGB[2]
+                varRGB[0]>>1,
+                varRGB[1]>>1,
+                varRGB[2]>>1
             )));
 
         /*draw random Ellipse*/
