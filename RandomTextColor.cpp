@@ -110,7 +110,11 @@ inline QImage toRandomTriangle(const QImage & arg) {
 
         auto varColor = std::min(255,
             qGray( arg.pixel (x, y) ) + ( std::rand()&15)) ;
-        varPainter.setBrush(QColor(varColor,varColor,varColor));
+
+        auto varDrawColor = QColor(varColor, varColor, varColor);
+
+        varPainter.setBrush(varDrawColor);
+        varPainter.setPen(QPen(varDrawColor.darker(1) ,1));
 
         assert(varI.size() == 3);
         varPainter.drawPolygon(varI.data(), 3);
