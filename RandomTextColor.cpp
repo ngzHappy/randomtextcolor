@@ -257,7 +257,8 @@ public:
         :super(arg) {
     }
 
-    inline bool errorReturn(const QString &) const {
+    inline bool errorReturn(const QString & arg) const {
+        qWarning() << arg;
         return false;
     }
 

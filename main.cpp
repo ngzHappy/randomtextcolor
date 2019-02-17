@@ -1,21 +1,20 @@
-﻿#include "MainWindow.hpp"
-#include <QApplication>
-
-
+﻿
 #include "RandomTextColor.hpp"
 
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
-    MainWindow window;
-    window.show();
+    QDir varDir{ app.applicationDirPath() };
 
-    RandomTextColor c{
-        QStringLiteral(R"(C:\Project\Test\randomtextcolor\image.jpg)"),
-        QStringLiteral(R"(C:\Project\Test\randomtextcolor\ans.png)") };
-    c.convert();
+    RandomTextColor varConvert{
+        varDir.absoluteFilePath(QStringLiteral("image")),
+        varDir.absoluteFilePath(QStringLiteral("ans.png")) };
+    
+    if (varConvert.convert()) {
+        return 0;
+    }
 
-    return app.exec();
+    return -1;
 }
 
 
