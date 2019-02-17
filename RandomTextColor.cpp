@@ -77,7 +77,10 @@ inline std::vector< std::array< QPointF, 3 > > toRandomTriangle(int argWidth, in
 inline QImage toRandomTriangle(const QImage & arg) {
 
     auto varTriangles =
-        toRandomTriangle(arg.width(), arg.height(), 3 );
+        toRandomTriangle(
+            arg.width(), 
+            arg.height(),
+            4 /*晶格大小*/ );
 
     QImage varAns = arg.convertToFormat(QImage::Format_RGBA64);
 
@@ -105,8 +108,9 @@ inline QImage toRandomTriangle(const QImage & arg) {
             y = std::min(varMaxY, static_cast<int>(varRY));
         }
 
-        auto varColor = arg.pixelColor(x, y);
-        varPainter.setBrush( varColor );
+        auto varColor = std::min(255,
+            qGray( arg.pixel (x, y) ) + ( std::rand()&15)) ;
+        varPainter.setBrush(QColor(varColor,varColor,varColor));
 
         assert(varI.size() == 3);
         varPainter.drawPolygon(varI.data(), 3);
@@ -274,8 +278,31 @@ public:
             QImage::Format_RGBA64
         );
 
-        mmmOutputImage = toRandomTriangle(mmmInputImage);
-        mmmOutputImage.save("xxxx.debug.png");
+        {
+            auto varTmpImage = toRandomTriangle(mmmInputImage);
+            mmmOutputImage =
+                mix_image(mmmInputImage, varTmpImage,
+                    [](
+                        const CurrentColor & argInputColor0,
+                        const CurrentColor & argInputColor1,
+                        CurrentAnsColor argAnsColor,
+                        int,
+                        int,
+                        int,
+                        int) -> void {
+                Color varInput0{ *(argInputColor0.color) };
+                Color varInput1{ *(argInputColor1.color) };
+                auto varF = [](double a, double b)->double {
+                    const auto var = (std::rand()&255)/1024 + 0.5 ;
+                    return std::clamp(a * (1 - var) + b * var, 0., 1.);
+                };
+                Color varAns{ varF(varInput0.r,varInput1.r),
+                    varF(varInput0.g,varInput1.g),
+                    varF(varInput0.b,varInput1.b),1 };
+                *(argAnsColor.color) = varAns;
+            });
+            mmmInputImage = mmmOutputImage;
+        }
 
         create_mask_image();
         mmmOutputImage = /*滤色*/
