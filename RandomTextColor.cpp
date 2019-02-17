@@ -1,16 +1,17 @@
-﻿#include "RandomTextColor.hpp"
+﻿
+#ifndef _DEBUG
+#ifndef NDEBUG
+#define NDEBUG (1u)
+#endif
+#endif
+
+#include "RandomTextColor.hpp"
 #include <cassert>
 #include <vector>
 #include <algorithm>
 #include <boost/polygon/voronoi.hpp>
 #include <array>
 #include <list>
-
-#ifndef _DEBUG
-#ifndef NDEBUG
-#define NDEBUG (1u)
-#endif
-#endif
 
 #ifndef error_return
 #define error_return(...) return errorReturn(QStringLiteral(__VA_ARGS__))
