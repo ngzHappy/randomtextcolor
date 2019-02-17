@@ -18,3 +18,10 @@ HEADERS += \
 
 FORMS +=
 
+
+CONFIG(debug,debug|release){
+    DESTDIR = $$PWD/bin/debugDir
+}else{
+    DESTDIR = $$PWD/bin/releaseDir
+}
+
